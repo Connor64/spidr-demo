@@ -5,13 +5,13 @@ function FryerForm() {
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [phoneNum, setPhoneNum] = useState<string>("");
-    const [validPhone, setValidPhone] = useState<boolean>(true);
+    const [validPhone, setValidPhone] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
-    const [validEmail, setValidEmail] = useState<boolean>(true);
+    const [validEmail, setValidEmail] = useState<boolean>(false);
     const [costGuessInput, setCostGuessInput] = useState<string>("$0");
     const [costGuess, setCostGuess] = useState<number>(0.00);
     const [pin, setPin] = useState<string>("");
-    const [validPin, setValidPin] = useState<boolean>(true);
+    const [validPin, setValidPin] = useState<boolean>(false);
     const [validSubmission, setValidSubmission] = useState<boolean>(true);
     const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -86,7 +86,7 @@ function FryerForm() {
                                 setPhoneNum(formattedPhone);
                                 setValidPhone(isPhoneValid);
                             }} required/>
-                    <h5 className='form-error' style={{display: validPhone ? 'none' : 'inline'}}>Please enter a valid phone number.*</h5>
+                    <h5 className='form-error' style={{display: (validSubmission || validPhone) ? 'none' : 'inline'}}>Please enter a valid phone number.*</h5>
                 </div>
 
 
@@ -101,7 +101,7 @@ function FryerForm() {
                                 setEmail(userEmail);
                                 setValidEmail(emailRegex.test(userEmail));
                             }} required/>
-                    <h5 className='form-error' style={{display: validEmail ? 'none' : 'inline'}}>Please enter a valid email*</h5>
+                    <h5 className='form-error' style={{display: (validSubmission || validEmail) ? 'none' : 'inline'}}>Please enter a valid email*</h5>
                 </div>
 
 
@@ -125,7 +125,7 @@ function FryerForm() {
                                 setPin(formattedPin);
                                 setValidPin(isPinValid)
                             }} required/>
-                    <h5 className='form-error' style={{display: validPin ? 'none' : 'inline'}}>Please enter a valid PIN*</h5>
+                    <h5 className='form-error' style={{display: (validSubmission || validPin) ? 'none' : 'inline'}}>Please enter a valid PIN*</h5>
                 </div>
                 <br></br>
                 <br></br>
