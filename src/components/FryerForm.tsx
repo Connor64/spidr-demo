@@ -79,7 +79,11 @@ function FryerForm() {
                 <div className='entry-field'>
                     <h3>Phone Number:</h3>
                     <input type="text" className="form-field" placeholder="Phone Number" aria-label="Phone Number" name="phoneNum"
-                            value={phoneNum} onChange={e => setPhoneNum(e.target.value)} required/>
+                            value={phoneNum} onChange={e => {
+                                let [formattedPhone, isPinValid] = PhoneFormat(e.target.value);
+                                setPhoneNum(formattedPhone);
+                                // setValidPin(isPinValid)
+                            }} required/>
                     <h5 className='form-error' style={{display: (validSubmission || firstName != "") ? 'none' : 'inline'}}>Please enter a phone number.*</h5>
                 </div>
 
@@ -138,6 +142,12 @@ function FryerForm() {
     );
 }
 
+/**
+ * Formats the given number into a dollar amount with 2 decimal places.
+ * 
+ * @param costInput A raw, user-entered string containing a dollar amount.
+ * @returns A parsed number with only 2 decimal places.
+ */
 function CostFormat(costInput: string) {
     const maxDecimalPoints = 2;
 
@@ -159,6 +169,13 @@ function CostFormat(costInput: string) {
     return parseFloat(costSanitized);
 }
 
+/**
+ * Formats the given PIN into a hyphenated format XXXX-XXXX-XXXX-XXXX.
+ * 
+ * @param pinInput A raw, user-entered string containing their Spyder PIN.
+ * @returns A tuple [string, boolean] contianing the formatted string and
+ *          whether the PIN is a valid length.
+ */
 function PinFormat(pinInput: string): [string, boolean] {
     const delimiter = '-';
     const validPinLength = 16;
@@ -179,6 +196,42 @@ function PinFormat(pinInput: string): [string, boolean] {
     }
 
     return [formattedPin, digitsOnly.length === validPinLength];
+}
+
+/**
+ * Formats the given string into a valid phone number format XXX-XXX-XXXX.
+ * 
+ * @param phoneInput A raw, user-entered string containing their phone number
+ * @returns A tuple [string, boolean] containing the formatted string and
+ *          whether the phone number is a valid length.
+ */
+function PhoneFormat(phoneInput: string): [string, boolean] {
+    const delimiter = '-';
+    const validPhoneLength = 10;
+
+    // Remove all non-digit characters and limit to 10 digits
+    const digitsOnly = phoneInput.replace(/\D/g, '').slice(0, validPhoneLength);
+
+    let formattedPhoneNum = '';
+    
+    if (digitsOnly.length > 0) {
+        formattedPhoneNum += digitsOnly.slice(0, 3);
+    }
+    if (digitsOnly.length >= 4) {
+        formattedPhoneNum += delimiter + digitsOnly.slice(3, 6);
+    }
+    if (digitsOnly.length >= 7) {
+        formattedPhoneNum += delimiter + digitsOnly.slice(6, 10);
+    }
+
+    // If the user typed a hyphen manually, retain it
+    const sectionLength = 3;
+    if (phoneInput.endsWith(delimiter) && (formattedPhoneNum.length < 8) &&
+        (formattedPhoneNum.length % (sectionLength + 1) == sectionLength)) {
+        formattedPhoneNum += delimiter;
+    }
+
+    return [formattedPhoneNum, digitsOnly.length === validPhoneLength];
 }
 
 export default FryerForm
