@@ -152,6 +152,7 @@ function FryerForm() {
  * Formats the given number into a dollar amount with 2 decimal places.
  * 
  * @param costInput A raw, user-entered string containing a dollar amount.
+ * @param previousValue The previously stored valid cost value.
  * @returns A parsed number with only 2 decimal places.
  */
 function CostFormat(costInput: string, previousValue: string): string {
