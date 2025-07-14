@@ -4,6 +4,8 @@ import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <title>Spidr Form Demo</title>
+    
     <App />
   </StrictMode>,
 )
